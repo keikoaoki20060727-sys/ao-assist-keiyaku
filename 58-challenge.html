@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>58歳からの挑戦｜AO Assist</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap');
+:root{
+  --sage:#2e6b50; --sage-light:#e6f2ec; --sage-dark:#1a4a30;
+  --warm:#c8702a; --warm-light:#fdf3eb;
+  --pink:#c0577a; --pink-light:#fbeaf0;
+  --ink:#1a1a2e; --paper:#faf9f5; --border:#e2e0d8;
+}
+*{box-sizing:border-box;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);padding-bottom:70px;}
+.brand-font{font-family:'Zen Maru Gothic',sans-serif;}
+.navbar-brand{font-family:'Zen Maru Gothic',sans-serif;font-weight:900;color:var(--sage-dark)!important;}
+.sidebar{background:#fff;border-right:1px solid var(--border);min-height:100vh;}
+.nav-link{color:var(--ink);font-size:14px;font-weight:700;border-radius:8px;padding:9px 12px;margin-bottom:3px;display:flex;align-items:center;gap:8px;}
+.nav-link.active{background:var(--sage);color:#fff!important;}
+.nav-link:hover{background:var(--sage-light);}
+.section{display:none;}
+.section.active{display:block;}
+.card{border:1px solid var(--border);border-radius:14px;}
+.card-header{background:var(--sage-light);border-bottom:1px solid var(--border);font-weight:700;color:var(--sage-dark);border-radius:14px 14px 0 0!important;}
+.btn-sage{background:var(--sage);border-color:var(--sage);color:#fff;}
+.btn-sage:hover{background:var(--sage-dark);border-color:var(--sage-dark);color:#fff;}
+.btn-outline-sage{border-color:var(--sage);color:var(--sage);}
+.btn-outline-sage:hover{background:var(--sage);color:#fff;}
+.badge-warm{background:var(--warm-light);color:var(--warm);border:1px solid var(--warm);}
+.badge-sage{background:var(--sage-light);color:var(--sage-dark);border:1px solid var(--sage);}
+.entry-row{border-bottom:1px solid var(--border);padding:10px 0;}
+.entry-row:last-child{border-bottom:none;}
+.hero{background:linear-gradient(135deg,var(--sage-dark),var(--sage));color:#fff;border-radius:16px;padding:24px;}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;}
+.stat-num{font-size:26px;font-weight:900;color:var(--sage-dark);}
+.stat-label{font-size:11px;color:#888;font-weight:700;}
+.roadmap-stage{border:2px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;position:relative;}
+.roadmap-stage.done{border-color:var(--sage);background:var(--sage-light);}
+.roadmap-stage.current{border-color:var(--warm);background:var(--warm-light);box-shadow:0 0 0 3px rgba(200,112,42,.15);}
+.mood-btn{width:38px;height:38px;border-radius:50%;border:2px solid var(--border);background:#fff;font-size:18px;}
+.mood-btn.active{background:var(--warm);border-color:var(--warm);}
+.job-card{border:1px solid var(--border);border-radius:10px;padding:10px;font-size:13px;height:100%;}
+.organize-result{background:var(--sage-light);border:1px solid var(--sage);border-radius:10px;padding:14px;}
+.organize-result h6{color:var(--sage-dark);font-weight:900;}
+.tab-pill{cursor:pointer;}
+#toastBox{position:fixed;bottom:16px;right:16px;z-index:2000;}
+.day30-item{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--border);font-size:13px;}
+.day30-item:last-child{border-bottom:none;}
+@media (max-width:991px){
+  .sidebar{position:fixed;top:0;left:-280px;width:260px;z-index:1050;transition:left .25s;box-shadow:0 0 20px rgba(0,0,0,.2);}
+  .sidebar.open{left:0;}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1040;}
+  .overlay.show{display:block;}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-light bg-white border-bottom sticky-top px-3">
+  <button class="btn btn-outline-secondary me-2 d-lg-none" id="menuBtn"><i class="bi bi-list"></i></button>
+  <span class="navbar-brand mb-0">🌱 58歳からの挑戦</span>
+  <span class="ms-auto small text-muted d-none d-md-inline">月0円から、息子の留学費用を自分の力で。</span>
+</nav>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-3 col-xl-2 sidebar p-3" id="sidebar">
+      <div class="nav flex-column" id="navMenu">
+        <a class="nav-link active" data-target="dashboard"><i class="bi bi-house-heart"></i>ダッシュボード</a>
+        <a class="nav-link" data-target="dream"><i class="bi bi-stars"></i>夢・目標設定</a>
+        <a class="nav-link" data-target="income"><i class="bi bi-cash-coin"></i>収益管理</a>
+        <a class="nav-link" data-target="today"><i class="bi bi-check2-square"></i>今日の挑戦</a>
+        <a class="nav-link" data-target="diary"><i class="bi bi-journal-richtext"></i>挑戦日記</a>
+        <a class="nav-link" data-target="trouble"><i class="bi bi-life-preserver"></i>困りごと整理ノート</a>
+        <a class="nav-link" data-target="ai"><i class="bi bi-robot"></i>AIとの対話記録</a>
+        <a class="nav-link" data-target="learning"><i class="bi bi-mortarboard"></i>学習記録</a>
+        <a class="nav-link" data-target="success"><i class="bi bi-trophy"></i>成功体験DB</a>
+        <a class="nav-link" data-target="monthly"><i class="bi bi-calendar3"></i>月間振り返り</a>
+        <a class="nav-link" data-target="roadmap"><i class="bi bi-signpost-split"></i>達成ロードマップ</a>
+        <a class="nav-link" data-target="settings"><i class="bi bi-gear"></i>設定・データ保存</a>
+      </div>
+    </div>
+
+    <div class="col-lg-9 col-xl-10 py-4">
+
+      <!-- ===== DASHBOARD ===== -->
+      <div class="section active" id="sec-dashboard">
+        <div class="hero mb-4">
+          <div class="brand-font fs-4 fw-bold">おかえりなさい、<span id="dashName">あなた</span>さん 🌱</div>
+          <div class="mt-1" id="dashTagline">月0円から始まった挑戦、今日も一歩進めましょう。</div>
+        </div>
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" id="statTotalIncome">¥0</div><div class="stat-label">累計収益</div></div></div>
+          <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" id="statMonthIncome">¥0</div><div class="stat-label">今月の収益</div></div></div>
+          <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" id="statChallengeDone">0</div><div class="stat-label">完了した挑戦</div></div></div>
+          <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" id="statDiaryCount">0</div><div class="stat-label">挑戦日記の数</div></div></div>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="card h-100"><div class="card-header"><i class="bi bi-graph-up-arrow"></i> 収益の推移</div>
+              <div class="card-body"><canvas id="incomeChart" height="180"></canvas></div></div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100"><div class="card-header"><i class="bi bi-signpost-split"></i> ロードマップの現在地</div>
+              <div class="card-body" id="dashRoadmap"></div></div>
+          </div>
+        </div>
+        <div class="card mt-3"><div class="card-header"><i class="bi bi-trophy"></i> 最近の成功体験</div>
+          <div class="card-body" id="dashRecentSuccess"><div class="text-muted small">まだ記録がありません。「成功体験DB」から追加しましょう。</div></div></div>
+      </div>
+
+      <!-- ===== DREAM ===== -->
+      <div class="section" id="sec-dream">
+        <h4 class="brand-font mb-3"><i class="bi bi-stars"></i> 夢・目標設定</h4>
+        <div class="card mb-3"><div class="card-header">本当の夢</div>
+          <div class="card-body">
+            <div class="mb-2"><label class="form-label fw-bold small">息子さんの留学先・時期</label><input type="text" class="form-control" id="dreamSonPlan" placeholder="例：来年9月からカナダへ1年間"></div>
+            <div class="row g-2 mb-2">
+              <div class="col-6"><label class="form-label fw-bold small">必要な留学費用合計</label><input type="number" class="form-control" id="dreamTargetAmount" placeholder="3000000"></div>
+              <div class="col-6"><label class="form-label fw-bold small">期限</label><input type="date" class="form-control" id="dreamDeadline"></div>
+            </div>
+            <div class="mb-2"><label class="form-label fw-bold small">今、自分が用意できている金額</label><input type="number" class="form-control" id="dreamCurrentSaving" placeholder="0"></div>
+            <div class="mb-2"><label class="form-label fw-bold small">この夢を叶えたい理由（あとで読み返すモチベーション）</label><textarea class="form-control" id="dreamWhy" rows="3" placeholder="息子に世界を見せたい、自分の可能性も諦めたくない…"></textarea></div>
+            <button class="btn btn-sage" id="saveDreamBtn"><i class="bi bi-save"></i> 保存する</button>
+          </div>
+        </div>
+        <div class="card"><div class="card-header">マイルストーン</div>
+          <div class="card-body">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" id="milestoneInput" placeholder="例：ココナラに初出品する">
+              <button class="btn btn-outline-sage" id="addMilestoneBtn"><i class="bi bi-plus-lg"></i> 追加</button>
+            </div>
+            <div id="milestoneList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== INCOME ===== -->
+      <div class="section" id="sec-income">
+        <h4 class="brand-font mb-3"><i class="bi bi-cash-coin"></i> 収益管理</h4>
+        <div class="card mb-3"><div class="card-header">記録を追加</div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-2"><label class="small fw-bold">日付</label><input type="date" class="form-control" id="incDate"></div>
+              <div class="col-md-2"><label class="small fw-bold">区分</label>
+                <select class="form-select" id="incType"><option value="income">収入</option><option value="expense">支出</option></select></div>
+              <div class="col-md-2"><label class="small fw-bold">プラットフォーム</label>
+                <select class="form-select" id="incPlatform">
+                  <option>ココナラ</option><option>クラウドワークス</option><option>ランサーズ</option><option>Upwork</option><option>note</option><option>直接契約</option><option>その他</option>
+                </select></div>
+              <div class="col-md-3"><label class="small fw-bold">内容</label><input type="text" class="form-control" id="incService" placeholder="freee相談 30分"></div>
+              <div class="col-md-2"><label class="small fw-bold">金額（円）</label><input type="number" class="form-control" id="incAmount" placeholder="3000"></div>
+              <div class="col-md-1 d-flex align-items-end"><button class="btn btn-sage w-100" id="addIncomeBtn"><i class="bi bi-plus-lg"></i></button></div>
+            </div>
+          </div>
+        </div>
+        <div class="card"><div class="card-header d-flex justify-content-between align-items-center">
+            <span>記録一覧</span><span class="badge-sage badge" id="incomeSummaryBadge">合計 ¥0</span></div>
+          <div class="card-body" id="incomeList"><div class="text-muted small">まだ記録がありません。</div></div>
+        </div>
+      </div>
+
+      <!-- ===== TODAY ===== -->
+      <div class="section" id="sec-today">
+        <h4 class="brand-font mb-3"><i class="bi bi-check2-square"></i> 今日の挑戦管理</h4>
+        <div class="card mb-3"><div class="card-body">
+          <div class="input-group">
+            <input type="text" class="form-control" id="challengeInput" placeholder="今日やる挑戦を入力（例：ココナラに出品文を1つ作る）">
+            <button class="btn btn-sage" id="addChallengeBtn"><i class="bi bi-plus-lg"></i> 追加</button>
+          </div>
+        </div></div>
+        <div class="card"><div class="card-header">挑戦リスト</div>
+          <div class="card-body" id="challengeList"><div class="text-muted small">まだ挑戦が登録されていません。</div></div>
+        </div>
+      </div>
+
+      <!-- ===== DIARY ===== -->
+      <div class="section" id="sec-diary">
+        <h4 class="brand-font mb-3"><i class="bi bi-journal-richtext"></i> 挑戦日記</h4>
+        <div class="card mb-3"><div class="card-header">今日の記録</div>
+          <div class="card-body">
+            <div class="row g-2 mb-2">
+              <div class="col-md-3"><label class="small fw-bold">日付</label><input type="date" class="form-control" id="diaryDate"></div>
+              <div class="col-md-9"><label class="small fw-bold d-block">今日の気分</label>
+                <div class="d-flex gap-2" id="moodPicker">
+                  <button class="mood-btn" data-mood="1">😢</button><button class="mood-btn" data-mood="2">😟</button>
+                  <button class="mood-btn" data-mood="3">😐</button><button class="mood-btn" data-mood="4">🙂</button>
+                  <button class="mood-btn" data-mood="5">😄</button>
+                </div></div>
+            </div>
+            <div class="mb-2"><label class="small fw-bold">うまくいったこと</label><textarea class="form-control" id="diaryGood" rows="2"></textarea></div>
+            <div class="mb-2"><label class="small fw-bold">失敗・うまくいかなかったこと（記録してOK）</label><textarea class="form-control" id="diaryFail" rows="2"></textarea></div>
+            <div class="mb-2"><label class="small fw-bold">明日に向けてのひと言</label><textarea class="form-control" id="diaryNote" rows="2"></textarea></div>
+            <button class="btn btn-sage" id="addDiaryBtn"><i class="bi bi-plus-lg"></i> 記録する</button>
+          </div>
+        </div>
+        <div class="card"><div class="card-header">これまでの日記</div>
+          <div class="card-body" id="diaryList"><div class="text-muted small">まだ記録がありません。</div></div></div>
+      </div>
+
+      <!-- ===== TROUBLE / ORGANIZE MODE ===== -->
+      <div class="section" id="sec-trouble">
+        <h4 class="brand-font mb-3"><i class="bi bi-life-preserver"></i> 困りごと整理ノート</h4>
+        <div class="card mb-3 border-warning"><div class="card-header" style="background:var(--warm-light);color:var(--warm);">
+            <i class="bi bi-magic"></i> めんどくさい整理屋モード</div>
+          <div class="card-body">
+            <p class="small text-muted">相談したいことをそのまま書いてください。「本当の問題・考えられる原因・解決策」に整理します。</p>
+            <textarea class="form-control mb-2" id="troubleInput" rows="4" placeholder="例：ココナラに出品したけど全然売れない。どうしたらいいかわからない。"></textarea>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <button class="btn btn-warning" id="organizeBtn"><i class="bi bi-magic"></i> 整理する</button>
+              <button class="btn btn-outline-secondary" id="copyPromptBtn"><i class="bi bi-clipboard"></i> AI相談用プロンプトをコピー</button>
+            </div>
+            <div id="organizeResultBox" style="display:none;">
+              <div class="organize-result mb-3">
+                <h6><i class="bi bi-exclamation-circle"></i> 本当の問題（仮）</h6>
+                <textarea class="form-control mb-3" id="orgProblem" rows="2"></textarea>
+                <h6><i class="bi bi-search"></i> 考えられる原因</h6>
+                <textarea class="form-control mb-3" id="orgCauses" rows="3"></textarea>
+                <h6><i class="bi bi-lightbulb"></i> 解決策の候補</h6>
+                <textarea class="form-control mb-3" id="orgSolutions" rows="3"></textarea>
+                <button class="btn btn-sage" id="saveTroubleBtn"><i class="bi bi-save"></i> ノートに保存</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card"><div class="card-header">これまでの困りごと</div>
+          <div class="card-body" id="troubleList"><div class="text-muted small">まだ記録がありません。</div></div></div>
+      </div>
+
+      <!-- ===== AI LOG ===== -->
+      <div class="section" id="sec-ai">
+        <h4 class="brand-font mb-3"><i class="bi bi-robot"></i> AIとの対話記録</h4>
+        <div class="card mb-3"><div class="card-header">記録を追加</div>
+          <div class="card-body">
+            <div class="row g-2 mb-2">
+              <div class="col-md-3"><label class="small fw-bold">使ったAI</label>
+                <select class="form-select" id="aiTool"><option>Claude</option><option>ChatGPT</option><option>Gemini</option><option>その他</option></select></div>
+              <div class="col-md-9"><label class="small fw-bold">タグ</label><input type="text" class="form-control" id="aiTag" placeholder="例：freee設定 / 出品文作成"></div>
+            </div>
+            <div class="mb-2"><label class="small fw-bold">質問・相談した内容</label><textarea class="form-control" id="aiQuestion" rows="2"></textarea></div>
+            <div class="mb-2"><label class="small fw-bold">AIの回答（メモ）</label><textarea class="form-control" id="aiAnswer" rows="3"></textarea></div>
+            <button class="btn btn-sage" id="addAiLogBtn"><i class="bi bi-plus-lg"></i> 記録する</button>
+          </div>
+        </div>
+        <div class="card"><div class="card-header">記録一覧</div>
+          <div class="card-body" id="aiList"><div class="text-muted small">まだ記録がありません。</div></div></div>
+      </div>
+
+      <!-- ===== LEARNING ===== -->
+      <div class="section" id="sec-learning">
+        <h4 class="brand-font mb-3"><i class="bi bi-mortarboard"></i> 学習記録</h4>
+        <div class="card mb-3"><div class="card-body">
+          <div class="row g-2">
+            <div class="col-md-3"><label class="small fw-bold">日付</label><input type="date" class="form-control" id="learnDate"></div>
+            <div class="col-md-4"><label class="small fw-bold">学習内容</label><input type="text" class="form-control" id="learnTopic" placeholder="freeeの仕訳パターン"></div>
+            <div class="col-md-2"><label class="small fw-bold">時間（分）</label><input type="number" class="form-control" id="learnMinutes" placeholder="30"></div>
+            <div class="col-md-3"><label class="small fw-bold">メモ</label><input type="text" class="form-control" id="learnNote"></div>
+          </div>
+          <button class="btn btn-sage mt-2" id="addLearnBtn"><i class="bi bi-plus-lg"></i> 記録する</button>
+        </div></div>
+        <div class="card"><div class="card-header d-flex justify-content-between"><span>記録一覧</span><span class="badge-sage badge" id="learnTotalBadge">合計 0分</span></div>
+          <div class="card-body" id="learnList"><div class="text-muted small">まだ記録がありません。</div></div></div>
+      </div>
+
+      <!-- ===== SUCCESS DB ===== -->
+      <div class="section" id="sec-success">
+        <h4 class="brand-font mb-3"><i class="bi bi-trophy"></i> 成功体験データベース</h4>
+        <div class="card mb-3"><div class="card-body">
+          <div class="row g-2">
+            <div class="col-md-3"><label class="small fw-bold">日付</label><input type="date" class="form-control" id="successDate"></div>
+            <div class="col-md-5"><label class="small fw-bold">タイトル</label><input type="text" class="form-control" id="successTitle" placeholder="初めての受注！"></div>
+            <div class="col-md-2"><label class="small fw-bold">金額</label><input type="number" class="form-control" id="successAmount" placeholder="3000"></div>
+            <div class="col-md-2"><label class="small fw-bold">タグ</label><input type="text" class="form-control" id="successTag" placeholder="ココナラ"></div>
+          </div>
+          <div class="mt-2"><label class="small fw-bold">詳細</label><textarea class="form-control" id="successDetail" rows="2"></textarea></div>
+          <button class="btn btn-sage mt-2" id="addSuccessBtn"><i class="bi bi-plus-lg"></i> 記録する</button>
+        </div></div>
+        <div class="card"><div class="card-header">これまでの成功体験</div>
+          <div class="card-body" id="successList"><div class="text-muted small">まだ記録がありません。</div></div></div>
+      </div>
+
+      <!-- ===== MONTHLY ===== -->
+      <div class="section" id="sec-monthly">
+        <h4 class="brand-font mb-3"><i class="bi bi-calendar3"></i> 月間振り返り</h4>
+        <div class="card mb-3"><div class="card-body">
+          <div class="row g-2 mb-2">
+            <div class="col-md-4"><label class="small fw-bold">対象月</label><input type="month" class="form-control" id="monthlyMonth"></div>
+          </div>
+          <button class="btn btn-outline-sage mb-3" id="autoFillMonthlyBtn"><i class="bi bi-magic"></i> 自動集計する</button>
+          <div class="row g-2 mb-2">
+            <div class="col-6"><div class="stat-card"><div class="stat-num" id="monthlyIncomeStat">¥0</div><div class="stat-label">この月の収益</div></div></div>
+            <div class="col-6"><div class="stat-card"><div class="stat-num" id="monthlyChallengeStat">0</div><div class="stat-label">完了した挑戦数</div></div></div>
+          </div>
+          <div class="mb-2"><label class="small fw-bold">良かったこと</label><textarea class="form-control" id="monthlyGood" rows="2"></textarea></div>
+          <div class="mb-2"><label class="small fw-bold">改善したいこと</label><textarea class="form-control" id="monthlyBad" rows="2"></textarea></div>
+          <div class="mb-2"><label class="small fw-bold">来月の目標</label><textarea class="form-control" id="monthlyNext" rows="2"></textarea></div>
+          <button class="btn btn-sage" id="saveMonthlyBtn"><i class="bi bi-save"></i> 保存する</button>
+        </div></div>
+        <div class="card"><div class="card-header">これまでの振り返り</div>
+          <div class="card-body" id="monthlyList"><div class="text-muted small">まだ記録がありません。</div></div></div>
+      </div>
+
+      <!-- ===== ROADMAP ===== -->
+      <div class="section" id="sec-roadmap">
+        <h4 class="brand-font mb-3"><i class="bi bi-signpost-split"></i> 達成ロードマップ</h4>
+        <div class="card mb-4"><div class="card-header">収益ロードマップ（今月の収益で自動判定）</div>
+          <div class="card-body" id="roadmapStages"></div></div>
+
+        <div class="card mb-4"><div class="card-header">30日間アクションプラン</div>
+          <div class="card-body" id="day30List" style="max-height:420px;overflow-y:auto;"></div></div>
+
+        <div class="card"><div class="card-header">副業仕事50選（参考リスト）</div>
+          <div class="card-body">
+            <div class="d-flex gap-2 mb-3 flex-wrap">
+              <select class="form-select form-select-sm w-auto" id="jobLevelFilter">
+                <option value="">レベル：すべて</option><option value="初心者">初心者</option><option value="中級者">中級者</option><option value="高単価">高単価</option>
+              </select>
+              <select class="form-select form-select-sm w-auto" id="jobPlatformFilter">
+                <option value="">プラットフォーム：すべて</option><option>ココナラ</option><option>クラウドワークス</option><option>ランサーズ</option><option>Upwork</option><option>OneForma</option>
+              </select>
+            </div>
+            <div class="row g-2" id="jobList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS ===== -->
+      <div class="section" id="sec-settings">
+        <h4 class="brand-font mb-3"><i class="bi bi-gear"></i> 設定・データ保存</h4>
+        <div class="card mb-3"><div class="card-header">プロフィール</div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-6"><label class="small fw-bold">あなたの名前（呼び方）</label><input type="text" class="form-control" id="settingName" placeholder="例：さとこ"></div>
+              <div class="col-md-6"><label class="small fw-bold">息子さんの名前（呼び方）</label><input type="text" class="form-control" id="settingSonName" placeholder="例：たくみ"></div>
+            </div>
+            <button class="btn btn-sage mt-2" id="saveProfileBtn"><i class="bi bi-save"></i> 保存</button>
+          </div>
+        </div>
+
+        <div class="card mb-3"><div class="card-header">データのバックアップ（JSONファイル）</div>
+          <div class="card-body">
+            <p class="small text-muted">このアプリのデータはお使いのブラウザ内（localStorage）に保存されています。バックアップやスマホ⇔PC間の移動にはJSONファイルの書き出し・読み込みをご利用ください。</p>
+            <button class="btn btn-outline-sage me-2" id="exportJsonBtn"><i class="bi bi-download"></i> JSONを書き出す</button>
+            <label class="btn btn-outline-secondary mb-0">
+              <i class="bi bi-upload"></i> JSONを読み込む
+              <input type="file" id="importJsonInput" accept="application/json" hidden>
+            </label>
+          </div>
+        </div>
+
+        <div class="card"><div class="card-header"><i class="bi bi-google"></i> Googleドライブ連携</div>
+          <div class="card-body">
+            <p class="small text-muted">Googleドライブへの保存には、ご自身のGoogle Cloud Consoleで発行したOAuthクライアントID（ウェブアプリケーション用）が必要です。クライアントIDはこのブラウザにのみ保存され、外部に送信されません。</p>
+            <div class="mb-2"><label class="small fw-bold">Google OAuth クライアントID</label><input type="text" class="form-control" id="driveClientId" placeholder="xxxxxxxx.apps.googleusercontent.com"></div>
+            <button class="btn btn-outline-sage mb-2" id="saveDriveClientBtn"><i class="bi bi-save"></i> 保存</button>
+            <div class="d-flex gap-2 flex-wrap mt-2">
+              <button class="btn btn-sage" id="driveSaveBtn"><i class="bi bi-cloud-upload"></i> Driveに保存</button>
+              <button class="btn btn-outline-sage" id="driveLoadBtn"><i class="bi bi-cloud-download"></i> Driveから読込</button>
+            </div>
+            <div class="small text-muted mt-2" id="driveStatus">未接続</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toastBox"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+/* ===================== データ管理 ===================== */
+const STORAGE_KEY = 'ao58_challenge_data_v1';
+const DRIVE_FILE_NAME = 'ao58-challenge-data.json';
+
+function defaultData(){
+  return {
+    profile:{ name:'', sonName:'' },
+    dream:{ sonPlan:'', targetAmount:0, deadline:'', currentSaving:0, why:'' },
+    milestones:[],
+    income:[],
+    challenges:[],
+    diary:[],
+    troubles:[],
+    aiLogs:[],
+    learning:[],
+    successes:[],
+    monthlyReviews:[],
+    day30Done:{},
+    settings:{ driveClientId:'', driveFileId:'' }
+  };
+}
+
+let DATA = loadData();
+
+function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return defaultData();
+    const parsed = JSON.parse(raw);
+    return Object.assign(defaultData(), parsed);
+  }catch(e){ return defaultData(); }
+}
+function saveData(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function yen(n){ return '¥'+Number(n||0).toLocaleString('ja-JP'); }
+function toast(msg){
+  const id='t'+uid();
+  const el=document.createElement('div');
+  el.className='toast align-items-center text-bg-dark border-0 show mb-2';
+  el.id=id;
+  el.innerHTML=`<div class="d-flex"><div class="toast-body">${msg}</div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+  document.getElementById('toastBox').appendChild(el);
+  setTimeout(()=>el.remove(),3000);
+}
+
+/* ===================== ナビゲーション ===================== */
+document.querySelectorAll('#navMenu .nav-link').forEach(link=>{
+  link.addEventListener('click', ()=>{
+    document.querySelectorAll('#navMenu .nav-link').forEach(l=>l.classList.remove('active'));
+    link.classList.add('active');
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.getElementById('sec-'+link.dataset.target).classList.add('active');
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+    if(link.dataset.target==='dashboard') renderDashboard();
+    if(link.dataset.target==='roadmap') renderRoadmapSection();
+  });
+});
+document.getElementById('menuBtn').addEventListener('click', ()=>{
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+});
+document.getElementById('overlay').addEventListener('click', ()=>{
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+});
+
+/* ===================== 夢・目標設定 ===================== */
+function fillDreamForm(){
+  document.getElementById('dreamSonPlan').value = DATA.dream.sonPlan||'';
+  document.getElementById('dreamTargetAmount').value = DATA.dream.targetAmount||'';
+  document.getElementById('dreamDeadline').value = DATA.dream.deadline||'';
+  document.getElementById('dreamCurrentSaving').value = DATA.dream.currentSaving||'';
+  document.getElementById('dreamWhy').value = DATA.dream.why||'';
+  renderMilestones();
+}
+document.getElementById('saveDreamBtn').addEventListener('click', ()=>{
+  DATA.dream = {
+    sonPlan: document.getElementById('dreamSonPlan').value,
+    targetAmount: Number(document.getElementById('dreamTargetAmount').value)||0,
+    deadline: document.getElementById('dreamDeadline').value,
+    currentSaving: Number(document.getElementById('dreamCurrentSaving').value)||0,
+    why: document.getElementById('dreamWhy').value
+  };
+  saveData(); toast('夢・目標を保存しました');
+});
+document.getElementById('addMilestoneBtn').addEventListener('click', ()=>{
+  const input = document.getElementById('milestoneInput');
+  if(!input.value.trim()) return;
+  DATA.milestones.push({id:uid(), text:input.value.trim(), done:false});
+  input.value='';
+  saveData(); renderMilestones();
+});
+function renderMilestones(){
+  const box = document.getElementById('milestoneList');
+  if(DATA.milestones.length===0){ box.innerHTML='<div class="text-muted small">まだマイルストーンがありません。</div>'; return; }
+  box.innerHTML = DATA.milestones.map(m=>`
+    <div class="entry-row d-flex align-items-center gap-2">
+      <input type="checkbox" class="form-check-input ms-check" data-id="${m.id}" ${m.done?'checked':''}>
+      <span class="${m.done?'text-decoration-line-through text-muted':''}">${escapeHtml(m.text)}</span>
+      <button class="btn btn-sm btn-outline-danger ms-auto ms-del" data-id="${m.id}"><i class="bi bi-trash"></i></button>
+    </div>`).join('');
+  box.querySelectorAll('.ms-check').forEach(cb=>cb.addEventListener('change', e=>{
+    const m=DATA.milestones.find(x=>x.id===e.target.dataset.id); m.done=e.target.checked; saveData(); renderMilestones();
+  }));
+  box.querySelectorAll('.ms-del').forEach(b=>b.addEventListener('click', e=>{
+    DATA.milestones = DATA.milestones.filter(x=>x.id!==e.target.closest('button').dataset.id); saveData(); renderMilestones();
+  }));
+}
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ===================== 収益管理 ===================== */
+document.getElementById('addIncomeBtn').addEventListener('click', ()=>{
+  const date=document.getElementById('incDate').value || todayStr();
+  const amount=Number(document.getElementById('incAmount').value);
+  if(!amount){ toast('金額を入力してください'); return; }
+  DATA.income.push({
+    id:uid(), date, type:document.getElementById('incType').value,
+    platform:document.getElementById('incPlatform').value,
+    service:document.getElementById('incService').value, amount
+  });
+  document.getElementById('incService').value=''; document.getElementById('incAmount').value='';
+  saveData(); renderIncome();
+});
+function renderIncome(){
+  const list=[...DATA.income].sort((a,b)=>b.date.localeCompare(a.date));
+  const box=document.getElementById('incomeList');
+  const total = DATA.income.reduce((s,i)=> s + (i.type==='expense'? -i.amount : i.amount), 0);
+  document.getElementById('incomeSummaryBadge').textContent = '合計 '+yen(total);
+  if(list.length===0){ box.innerHTML='<div class="text-muted small">まだ記録がありません。</div>'; return; }
+  box.innerHTML = list.map(i=>`
+    <div class="entry-row d-flex justify-content-between align-items-center">
+      <div>
+        <div class="fw-bold">${escapeHtml(i.service||'(無題)')} <span class="badge ${i.type==='expense'?'bg-danger-subtle text-danger':'badge-sage badge'}">${i.type==='expense'?'支出':i.platform}</span></div>
+        <div class="small text-muted">${i.date}</div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="fw-bold ${i.type==='expense'?'text-danger':'text-success'}">${i.type==='expense'?'-':'+'}${yen(i.amount)}</span>
+        <button class="btn btn-sm btn-outline-danger inc-del" data-id="${i.id}"><i class="bi bi-trash"></i></button>
+      </div>
+    </div>`).join('');
+  box.querySelectorAll('.inc-del').forEach(b=>b.addEventListener('click', e=>{
+    DATA.income = DATA.income.filter(x=>x.id!==e.target.closest('button').dataset.id); saveData(); renderIncome(); renderDashboard();
+  }));
+  renderDashboard();
+}
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+/* ===================== 今日の挑戦 ===================== */
+document.getElementById('addChallengeBtn').addEventListener('click', ()=>{
+  const input=document.getElementById('challengeInput');
+  if(!input.value.trim()) return;
+  DATA.challenges.push({id:uid(), date:todayStr(), text:input.value.trim(), done:false});
+  input.value=''; saveData(); renderChallenges();
+});
+function renderChallenges(){
+  const box=document.getElementById('challengeList');
+  if(DATA.challenges.length===0){ box.innerHTML='<div class="text-muted small">まだ挑戦が登録されていません。</div>'; return; }
+  const sorted=[...DATA.challenges].sort((a,b)=>b.date.localeCompare(a.date));
+  box.innerHTML = sorted.map(c=>`
+    <div class="entry-row d-flex align-items-center gap-2">
+      <input type="checkbox" class="form-check-input ch-check" data-id="${c.id}" ${c.done?'checked':''}>
+      <div class="flex-grow-1">
+        <div class="${c.done?'text-decoration-line-through text-muted':''}">${escapeHtml(c.text)}</div>
+        <div class="small text-muted">${c.date}</div>
+      </div>
+      <button class="btn btn-sm btn-outline-danger ch-del" data-id="${c.id}"><i class="bi bi-trash"></i></button>
+    </div>`).join('');
+  box.querySelectorAll('.ch-check').forEach(cb=>cb.addEventListener('change', e=>{
+    const c=DATA.challenges.find(x=>x.id===e.target.dataset.id); c.done=e.target.checked; saveData(); renderChallenges(); renderDashboard();
+  }));
+  box.querySelectorAll('.ch-del').forEach(b=>b.addEventListener('click', e=>{
+    DATA.challenges = DATA.challenges.filter(x=>x.id!==e.target.closest('button').dataset.id); saveData(); renderChallenges(); renderDashboard();
+  }));
+}
+
+/* ===================== 挑戦日記 ===================== */
+let selectedMood = 0;
+document.querySelectorAll('.mood-btn').forEach(b=>b.addEventListener('click', ()=>{
+  document.querySelectorAll('.mood-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); selectedMood = Number(b.dataset.mood);
+}));
+document.getElementById('addDiaryBtn').addEventListener('click', ()=>{
+  const date = document.getElementById('diaryDate').value || todayStr();
+  DATA.diary.push({
+    id:uid(), date, mood:selectedMood,
+    good:document.getElementById('diaryGood').value,
+    fail:document.getElementById('diaryFail').value,
+    note:document.getElementById('diaryNote').value
+  });
+  ['diaryGood','diaryFail','diaryNote'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('.mood-btn').forEach(x=>x.classList.remove('active')); selectedMood=0;
+  saveData(); renderDiary();
+});
+const moodEmoji = {1:'😢',2:'😟',3:'😐',4:'🙂',5:'😄'};
+function renderDiary(){
+  const box=document.getElementById('diaryList');
+  const list=[...DATA.diary].sort((a,b)=>b.date.localeCompare(a.date));
+  if(list.length===0){ box.innerHTML='<div class="text-muted small">まだ記録がありません。</div>'; return; }
+  box.innerHTML = list.map(d=>`
+    <div class="entry-row">
+      <div class="d-flex justify-content-between">
+        <div class="fw-bold">${d.date} ${moodEmoji[d.mood]||''}</div>
+        <button class="btn btn-sm btn-outline-danger dy-del" data-id="${d.id}"><i class="bi bi-trash"></i></button>
+      </div>
+      ${d.good?`<div class="small mt-1"><b class="text-success">○</b> ${escapeHtml(d.good)}</div>`:''}
+      ${d.fail?`<div class="small"><b class="text-danger">×</b> ${escapeHtml(d.fail)}</div>`:''}
+      ${d.note?`<div class="small text-muted">${escapeHtml(d.note)}</div>`:''}
+    </div>`).join('');
+  box.querySelectorAll('.dy-del').forEach(b=>b.addEventListener('click', e=>{
+    DATA.diary = DATA.diary.filter(x=>x.id!==e.target.closest('button').dataset.id); saveData(); renderDiary(); renderDashboard();
+  }));
+}
+
+/* ===================== 困りごと整理ノート（めんどくさい整理屋モード） ===================== */
+const ORGANIZE_RULES = [
+  { keys:['売れない','受注','申込','依頼が来ない','集客'], problem:'サービスの「魅力」と「届け方」がターゲットに伝わっていない可能性があります。',
+    causes:['出品文・プロフィールで強みが具体的に伝わっていない','価格と提供内容のバランスが分かりにくい','検索されるキーワードが入っていない','まだ実績・レビューが少なく信頼が伝わりにくい'],
+    solutions:['出品文に「誰の・どんな悩みを・どう解決するか」を明記する','最初の数件は価格を下げて実績とレビューを優先する','AIで競合の出品文を分析し改善点を3つ出す','SNSやnoteで先に専門性を発信して導線を作る'] },
+  { keys:['時間がない','時間','忙しい','余裕がない'], problem:'やることが多すぎて、優先順位がつけられていない可能性があります。',
+    causes:['一日のタスクを全部「重要」にしてしまっている','スキマ時間の使い方が決まっていない','作業の見積もり時間が現実より楽観的すぎる'],
+    solutions:['「今日の挑戦管理」で1日1〜3個に絞る','15分単位でできる小さなタスクに分解する','AIにテンプレート作成や下書きを任せて時短する'] },
+  { keys:['不安','怖い','自信がない','できるか分から'], problem:'経験不足ではなく「初めてやることへの不安」が大きくなっている可能性があります。',
+    causes:['失敗した時のイメージばかりが先に浮かんでいる','比較対象が経験豊富な人になっている','小さな成功体験がまだ積み重なっていない'],
+    solutions:['「成功体験DB」に小さな成功も記録して見返す','最初の一歩を「失敗しても困らない規模」に小さくする','AIに相談して客観的なフィードバックをもらう'] },
+  { keys:['freee','経理','仕訳','簿記'], problem:'業務知識そのものより「正しいやり方の確認先」が不足している可能性があります。',
+    causes:['freeeの最新の仕様・UIを確認していない','業種特有の仕訳ルールを把握していない','確認すべき範囲（税務含む）が曖昧'],
+    solutions:['freeeのヘルプセンターや公式ガイドで該当機能を確認する','典型的な仕訳パターンをAIと一緒に整理してテンプレ化する','税務に関わる判断は税理士に確認する'] },
+  { keys:['価格','値段','料金','単価'], problem:'価格設定の「軸」が定まっていない可能性があります。',
+    causes:['相場感の調査がまだ不足している','自分の作業時間・スキルの価値を低く見積もっている','価格を上げるタイミングの基準がない'],
+    solutions:['同カテゴリの出品を5件比較して相場を把握する','実績が5件・10件たまったタイミングで段階的に値上げする','顧問契約など継続課金の形に移行する'] }
+];
+function organizeTrouble(text){
+  const lower = text;
+  let matched = ORGANIZE_RULES.filter(r=>r.keys.some(k=>lower.includes(k)));
+  if(matched.length===0){
+    return {
+      problem:'「'+text.slice(0,40)+(text.length>40?'…':'')+'」という状況の、表面的な出来事の裏にある本当の課題を一緒に考えてみましょう。',
+      causes:['情報や知識が不足している可能性','時間やリソースが不足している可能性','やり方・手順がまだ定まっていない可能性'],
+      solutions:['まずは小さく試して反応を見る','AIに相談内容を投げて、別の視点の意見をもらう','信頼できる人（先輩・コミュニティ）に聞いてみる']
+    };
+  }
+  const problem = matched.map(m=>m.problem).join(' / ');
+  const causes = [...new Set(matched.flatMap(m=>m.causes))];
+  const solutions = [...new Set(matched.flatMap(m=>m.solutions))];
+  return { problem, causes, solutions };
+}
+document.getElementById('organizeBtn').addEventListener('click', ()=>{
+  const text = document.getElementById('troubleInput').value.trim();
+  if(!text){
+    toast('相談内容を入力してください');
+    document.getElementById('organizeResultBox').style.display='none';
+    return;
+  }
+  const r = organizeTrouble(text);
+  document.getElementById('orgProblem').value = r.problem;
+  document.getElementById('orgCauses').value = r.causes.map(c=>'・'+c).join('\n');
+  document.getElementById('orgSolutions').value = r.solutions.map(s=>'・'+s).join('\n');
+  document.getElementById('organizeResultBox').style.display='block';
+});
+document.getElementById('copyPromptBtn').addEventListener('click', async ()=>{
+  const text = document.getElementById('troubleInput').value.trim();
+  if(!text){ toast('相談内容を入力してください'); return; }
+  const prompt = `あなたは経験豊富なビジネスメンターです。以下の相談内容について、(1)本当の問題は何か (2)考えられる原因 (3)具体的な解決策 の3つに整理して、簡潔に教えてください。\n\n【相談内容】\n${text}`;
+  try{ await navigator.clipboard.writeText(prompt); toast('プロンプトをコピーしました。AIに貼り付けて聞いてみましょう。'); }
+  catch(e){ toast('コピーに失敗しました。手動でコピーしてください。'); }
+});
+document.getElementById('saveTroubleBtn').addEventListener('click', ()=>{
+  const raw = document.getElementById('troubleInput').value.trim();
+  if(!raw){ return; }
+  DATA.troubles.push({
+    id:uid(), date:todayStr(), rawInput:raw,
+    problem:document.getElementById('orgProblem').value,
+    causes:document.getElementById('orgCauses').value,
+    solutions:document.getElementById('orgSolutions').value,
+    status:'未解決'
+  });
+  document.getElementById('troubleInput').value='';
+  document.getElementById('organizeResultBox').style.display='none';
+  saveData(); renderTroubles(); toast('ノートに保存しました');
+});
+function renderTroubles(){
+  const box=document.getElementById('troubleList');
+  const list=[...DATA.troubles].sort((a,b)=>b.date.localeCompare(a.date));
+  if(list.length===0){ box.innerHTML='<div class="text-muted small">まだ記録がありません。</div>'; return; }
+  box.innerHTML = list.map(t=>`
+    <div class="entry-row">
+      <div class="d-flex justify-content-between align-items-start">
+        <div class="fw-bold">${t.date} <span class="badge ${t.status==='解決済み'?'badge-sage badge':'badge-warm badge'}">${t.status}</span></div>
+        <div class="d-flex gap-1">
+          <button class="btn btn-sm btn-outline-sage tr-resolve" data-id="${t.id}"><i class="bi bi-check2"></i></button>
+          <button class="btn btn-sm btn-outline-danger tr-del" data-id="${t.id}"><i class="bi bi-trash"></i></button>
+        </div>
+      </div>
+      <div class="small text-muted mb-1">${escapeHtml(t.rawInput)}</div>
+      <div class="small"><b>問題：</b>${escapeHtml(t.problem)}</div>
+      <div class="small"><b>原因：</b><br>${escapeHtml(t.causes).replace(/\n/g,'<br>')}</div>
+      <div class="small"><b>解決策：</b><br>${escapeHtml(t.solutions).replace(/\n/g,'<br>')}</div>
+    </div>`).join('');
+  box.querySelectorAll('.tr-resolve').forEach(b=>b.addEventListener('click', e=>{
+    const t=DATA.troubles.find(x=>x.id===e.target.closest('button').dataset.id);
+    t.status = t.status==='解決済み' ? '未解決' : '解決済み'; saveData(); renderTroubles();
+  }));
+  box.querySelectorAll('.tr-del').forEach(b=>b.addEventListener('click', e=>{
+    DATA.troubles = DATA.troubles.filter(x=>x.id!==e.target.closest('button').dataset.id); saveData(); renderTroubles();
+  }));
+}
+
+/* ===================== AI対話記録 ===================== */
+document.getElementById('addAiLogBtn').addEventListener('click', ()=>{
+  const q=document.getElementById('aiQuestion').value.trim();
+  if(!q){ toast('質問内容を入力してください'); return; }
+  DATA.aiLogs.push({
+    id:uid(), date:todayStr(), tool:document.getElementById('aiTool').value,
+    tag:document.getElementById('aiTag').value, question:q,
+    answer:document.getElementById('aiAnswer').value
+  });
+  document.getElementById('aiQuestion').value=''; document.getElementById('aiAnswer').value=''; document.getElementById('aiTag').value='';
+  saveData(); renderAiLogs();
+});
+function renderAiLogs(){
+  const box=document.getElementById('aiList');
+  const list=[...DATA.aiLogs].sort((a,b)=>b.date.localeCompare(a.date));
+  if(list.length===0){ box.innerHTML='<div class="text-muted small">まだ記録がありません。</div>'; return; }
+  box.innerHTML = list.map(a=>`
+    <div class="entry-row">
+      <div class="d-flex justify-content-between">
+        <div class="fw-bold">${a.date} <span class="badge-sage badge">${escapeHtml(a.tool)}</span> ${a.tag?`<span class="badge-warm badge">${escapeHtml(a.tag)}</span>`:''}</div>
+        <button class="btn btn-sm btn-outline-danger ai-del" data-id="${a.id}"><i class="bi bi-trash"></i></button>
+      </div>
+      <div class="small mt-1"><b>Q:</b> ${escapeHtml(a.question)}</div>
+      ${a.answer?`<div class="small text-muted"><b>A:</b> ${escapeHtml(a.answer)}</div>`:''}
+    </div>`).join('');
+  box.querySelectorAll('.ai-del').forEach(b=>b.addEventListener('click', e=>{
+    DATA.aiLogs = DATA.aiLogs.filter(x=>x.id!==e.target.closest('button').dataset.id); saveData(); renderAiLogs();
+  }));
+}
+
+/* ===================== 学習記録 ===================== */
+document.getElementById('addLearnBtn').addEventListener('click', ()=>{
+  const topic=document.getElementById('learnTopic').value.trim();
+  if(!topic){ toast('学習内容を入力してください'); return; }
+  DATA.learning.push({
+    id:uid(), date:document.getElementById('learnDate').value||todayStr(),
+    topic, minutes:Number(document.getElementById('learnMinutes').value)||0,
+    note:document.getElementById('learnNote').value
+  });
+  document.getElementById('learnTopic').value=''; document.getElementById('learnMinutes').value=''; document.getElementById('learnNote').value='';
+  saveData(); renderLearning();
+});
+function renderLearning(){
+  const box=document.getElementById('learnList');
+  const list=[...DATA.learning].sort((a,b)=>b.date.localeCompare(a.date));
+  const total = DATA.learning.reduce((s,l)=>s+l.minutes,0);
+  document.getElementById('learnTotalBadge').textContent = '合計 '+total+'分';
+  if(list.length===0){ box.innerHTML='<div class="text-muted small">まだ記録がありません。</div>'; return; }
+  box.innerHTML = list.map(l=>`
+    <div class="entry-row d-flex justify-content-between align-items-start">
+      <div><div class="fw-bold">${escapeHtml(l.topic)} <span class="badge-sage badge">${l.minutes}分</span></div>
+      <div class="small text-muted">${l.date} ${l.note?(' / '+escapeHtml(l.note)):''}</div></div>
+      <button class="btn btn-sm btn-outline-danger lr-del" data-id="${l.id}"><i class="bi bi-trash"></i></button>
+    </div>`).join('');
+  box.querySelectorAll('.lr-del').forEach(b=>b.addEventListener('click', e=>{
+    DATA.learning = DATA.learning.filter(x=>x.id!==e.target.closest('button').dataset.id); saveData(); renderLearning();
+  }));
+}
+
+/* ===================== 成功体験DB ===================== */
+document.getElementById('addSuccessBtn').addEventListener('click', ()=>{
+  const title=document.getElementById('successTitle').value.trim();
+  if(!title){ toast('タイトルを入力してください'); return; }
+  DATA.successes.push({
+    id:uid(), date:document.getElementById('successDate').value||todayStr(),
+    title, amount:Number(document.getElementById('successAmount').value)||0,
+    tag:document.getElementById('successTag').value, detail:document.getElementById('successDetail').value
+  });
+  ['successTitle','successAmount','successTag','successDetail'].forEach(id=>document.getElementById(id).value='');
+  saveData(); renderSuccesses();
+});
+function renderSuccesses(){
+  const box=document.getElementById('successList');
+  const list=[...DATA.successes].sort((a,b)=>b.date.localeCompare(a.date));
+  if(list.length===0){ box.innerHTML='<div class="text-muted small">まだ記録がありません。</div>'; return; }
+  box.innerHTML = list.map(s=>`
+    <div class="entry-row">
+      <div class="d-flex justify-content-between">
+        <div class="fw-bold">🏆 ${escapeHtml(s.title)} ${s.tag?`<span class="badge-warm badge">${escapeHtml(s.tag)}</span>`:''}</div>
+        <button class="btn btn-sm btn-outline-danger sc-del" data-id="${s.id}"><i class="bi bi-trash"></i></button>
+      </div>
+      <div class="small text-muted">${s.date} ${s.amount?(' / '+yen(s.amount)):''}</div>
+      ${s.detail?`<div class="small">${escapeHtml(s.detail)}</div>`:''}
+    </div>`).join('');
+  box.querySelectorAll('.sc-del').forEach(b=>b.addEventListener('click', e=>{
+    DATA.successes = DATA.successes.filter(x=>x.id!==e.target.closest('button').dataset.id); saveData(); renderSuccesses(); renderDashboard();
+  }));
+  renderDashboard();
+}
+
+/* ===================== 月間振り返り ===================== */
+document.getElementById('autoFillMonthlyBtn').addEventListener('click', ()=>{
+  const ym = document.getElementById('monthlyMonth').value;
+  if(!ym){ toast('対象月を選んでください'); return; }
+  const income = DATA.income.filter(i=>i.date.startsWith(ym)).reduce((s,i)=> s + (i.type==='expense'? -i.amount : i.amount), 0);
+  const doneCh = DATA.challenges.filter(c=>c.date.startsWith(ym) && c.done).length;
+  document.getElementById('monthlyIncomeStat').textContent = yen(income);
+  document.getElementById('monthlyChallengeStat').textContent = doneCh;
+});
+document.getElementById('saveMonthlyBtn').addEventListener('click', ()=>{
+  const ym = document.getElementById('monthlyMonth').value;
+  if(!ym){ toast('対象月を選んでください'); return; }
+  const income = DATA.income.filter(i=>i.date.startsWith(ym)).reduce((s,i)=> s + (i.type==='expense'? -i.amount : i.amount), 0);
+  const doneCh = DATA.challenges.filter(c=>c.date.startsWith(ym) && c.done).length;
+  const existing = DATA.monthlyReviews.find(m=>m.yearMonth===ym);
+  const review = {
+    id: existing? existing.id : uid(), yearMonth: ym, income, challengeCount: doneCh,
+    good:document.getElementById('monthlyGood').value, bad:document.getElementById('monthlyBad').value,
+    next:document.getElementById('monthlyNext').value
+  };
+  if(existing){ Object.assign(existing, review); } else { DATA.monthlyReviews.push(review); }
+  saveData(); renderMonthlyList(); toast('振り返りを保存しました');
+});
+function renderMonthlyList(){
+  const box=document.getElementById('monthlyList');
+  const list=[...DATA.monthlyReviews].sort((a,b)=>b.yearMonth.localeCompare(a.yearMonth));
+  if(list.length===0){ box.innerHTML='<div class="text-muted small">まだ記録がありません。</div>'; return; }
+  box.innerHTML = list.map(m=>`
+    <div class="entry-row">
+      <div class="d-flex justify-content-between">
+        <div class="fw-bold">${m.yearMonth} <span class="badge-sage badge">${yen(m.income)}</span> <span class="badge-warm badge">挑戦${m.challengeCount}件</span></div>
+        <button class="btn btn-sm btn-outline-danger mo-del" data-id="${m.id}"><i class="bi bi-trash"></i></button>
+      </div>
+      ${m.good?`<div class="small mt-1"><b class="text-success">○</b> ${escapeHtml(m.good)}</div>`:''}
+      ${m.bad?`<div class="small"><b class="text-danger">×</b> ${escapeHtml(m.bad)}</div>`:''}
+      ${m.next?`<div class="small"><b>次月の目標：</b>${escapeHtml(m.next)}</div>`:''}
+    </div>`).join('');
+  box.querySelectorAll('.mo-del').forEach(b=>b.addEventListener('click', e=>{
+    DATA.monthlyReviews = DATA.monthlyReviews.filter(x=>x.id!==e.target.closest('button').dataset.id); saveData(); renderMonthlyList();
+  }));
+}
+
+/* ===================== 達成ロードマップ ===================== */
+const ROADMAP_STAGES = [
+  { label:'月1万円', amount:10000, phase:'1ヶ月目', desc:'ココナラでスポット相談2〜3件' },
+  { label:'月5万円', amount:50000, phase:'2〜3ヶ月目', desc:'テンプレート販売＋継続相談3〜4件' },
+  { label:'月10万円', amount:100000, phase:'4〜6ヶ月目', desc:'freee導入支援2社＋業務改善1件' },
+  { label:'月30万円', amount:300000, phase:'7〜12ヶ月目', desc:'顧問契約2〜3社（月3〜5万円/社）＋スポット案件' },
+  { label:'月50万円', amount:500000, phase:'12〜18ヶ月目', desc:'AO Assistブランド確立、顧問契約4〜5社＋システム構築案件' }
+];
+function currentMonthIncome(){
+  const ym = todayStr().slice(0,7);
+  return DATA.income.filter(i=>i.date.startsWith(ym)).reduce((s,i)=> s + (i.type==='expense'? -i.amount : i.amount), 0);
+}
+function renderRoadmapSection(){
+  const cur = currentMonthIncome();
+  const box = document.getElementById('roadmapStages');
+  let currentSet = false;
+  box.innerHTML = ROADMAP_STAGES.map(st=>{
+    let cls='';
+    if(cur>=st.amount) cls='done';
+    else if(!currentSet){ cls='current'; currentSet=true; }
+    return `<div class="roadmap-stage ${cls}">
+      <div class="d-flex justify-content-between">
+        <div class="fw-bold">${st.label}<span class="text-muted small"> （${st.phase}）</span></div>
+        <div>${cls==='done'?'<span class="badge badge-sage">達成</span>':cls==='current'?'<span class="badge badge-warm">挑戦中</span>':''}</div>
+      </div>
+      <div class="small">${st.desc}</div>
+    </div>`;
+  }).join('');
+
+  const day30Box = document.getElementById('day30List');
+  day30Box.innerHTML = DAY30_PLAN.map((d,idx)=>`
+    <div class="day30-item">
+      <input type="checkbox" class="form-check-input day30-check" data-idx="${idx}" ${DATA.day30Done[idx]?'checked':''}>
+      <div><b>${d.day}</b> ${escapeHtml(d.text)}</div>
+    </div>`).join('');
+  day30Box.querySelectorAll('.day30-check').forEach(cb=>cb.addEventListener('change', e=>{
+    DATA.day30Done[e.target.dataset.idx] = e.target.checked; saveData();
+  }));
+
+  renderJobList();
+}
+const DAY30_PLAN = [
+  {day:'Day1', text:'ココナラアカウント作成、プロフィール写真・自己紹介文作成（経理経験＋freee＋AI活用を明記）'},
+  {day:'Day2', text:'サービス出品文を3つ作成（①freee相談 ②Excelテンプレ ③経理業務改善）'},
+  {day:'Day3', text:'出品ページ公開（3サービス）、料金は最低ライン（2,000〜3,000円）で開始'},
+  {day:'Day4', text:'クラウドワークス・ランサーズにプロフィール登録'},
+  {day:'Day5', text:'「経理データ入力」「Excel作成」の簡易タスク案件を3件検索・提案文送付'},
+  {day:'Day6', text:'ココナラ出品サービスのSNS（X/Instagram）告知文を1本作成・投稿'},
+  {day:'Day7', text:'note開設、「経理×AI」に関する記事1本を投稿（集客用）'},
+  {day:'Day8-10', text:'提案文を送った案件のフォローアップ、追加で5件提案'},
+  {day:'Day11', text:'初回受注があれば即対応、Claudeでテンプレート/回答案を作成し納品'},
+  {day:'Day12', text:'納品後、評価依頼＋リピート案件の提案'},
+  {day:'Day13', text:'2つ目のサービス（原価管理表テンプレート）をGAS/Excelで試作'},
+  {day:'Day14', text:'試作品をココナラに追加出品'},
+  {day:'Day15', text:'クラウドワークスで「freee導入支援」案件を検索・3件提案'},
+  {day:'Day16', text:'既存の口コミ返信自動化（Makeシナリオ）をパッケージ化し、サービス出品文作成'},
+  {day:'Day17', text:'出品（口コミ返信自動化サービス、月額1万円〜）'},
+  {day:'Day18', text:'noteで2本目の記事（具体的なfreee活用Tips）投稿'},
+  {day:'Day19', text:'ココナラ・クラウドワークスの提案文をテンプレート化、3案件に再提案'},
+  {day:'Day20', text:'1週間分の作業時間・売上を記録・振り返り'},
+  {day:'Day21', text:'価格を1段階上げる（初回特典価格→通常価格へ）'},
+  {day:'Day22', text:'受注済みクライアントに「月額顧問契約」を提案（月1回相談＋月次チェック）'},
+  {day:'Day23', text:'Upworkアカウント作成（英語プロフィールはClaudeで翻訳・作成）'},
+  {day:'Day24', text:'Upworkで「bookkeeping data entry」「freee setup」関連を検索、テンプレート提案文を1件送付'},
+  {day:'Day25', text:'AO Assistブランドのサービスメニュー表（PDF）を作成'},
+  {day:'Day26', text:'既存クライアントへAO Assistメニュー表を共有、追加サービス案内'},
+  {day:'Day27', text:'1ヶ月の総売上・案件数・時間単価を集計'},
+  {day:'Day28', text:'今後1ヶ月の目標（月5万円達成プラン）を設定'},
+  {day:'Day29', text:'高評価のサービスをもう1つ追加出品（例：雇用契約書テンプレート作成）'},
+  {day:'Day30', text:'全体振り返り、改善点リスト作成、次月の出品・提案戦略を決定'}
+];
+const JOBS_50 = [
+  {n:1,name:'経理データ入力（freee/弥生）',level:'初心者',platforms:['ココナラ','クラウドワークス']},
+  {n:2,name:'請求書発行代行',level:'初心者',platforms:['ココナラ','ランサーズ']},
+  {n:3,name:'給与計算代行（小規模事業者向け）',level:'初心者',platforms:['クラウドワークス']},
+  {n:4,name:'経費精算チェック・仕訳入力',level:'初心者',platforms:['ココナラ','ランサーズ']},
+  {n:5,name:'Excel関数作成・テンプレート設計',level:'初心者',platforms:['クラウドワークス']},
+  {n:6,name:'請求書テンプレート作成（Excel/スプレッドシート）',level:'初心者',platforms:['ココナラ','ランサーズ']},
+  {n:7,name:'シフト表作成代行',level:'初心者',platforms:['クラウドワークス']},
+  {n:8,name:'業務マニュアル作成',level:'初心者',platforms:['ココナラ']},
+  {n:9,name:'データ入力・リスト化作業',level:'初心者',platforms:['クラウドワークス','Upwork','OneForma']},
+  {n:10,name:'ChatGPT/Claudeを使った文章作成代行',level:'初心者',platforms:['クラウドワークス','Upwork']},
+  {n:11,name:'メール文面作成・テンプレート化',level:'初心者',platforms:['ココナラ']},
+  {n:12,name:'Googleフォーム/スプレッドシート連携作成',level:'初心者',platforms:['クラウドワークス']},
+  {n:13,name:'簿記・経理に関する質問回答',level:'初心者',platforms:['ココナラ']},
+  {n:14,name:'領収書・レシートのデータ化代行',level:'初心者',platforms:['クラウドワークス','OneForma']},
+  {n:15,name:'議事録作成・要約代行',level:'初心者',platforms:['クラウドワークス']},
+  {n:16,name:'freee導入支援・初期設定代行',level:'中級者',platforms:['ココナラ','ランサーズ']},
+  {n:17,name:'月次・年次決算サポート（税理士補助）',level:'中級者',platforms:['クラウドワークス']},
+  {n:18,name:'部門別・店舗別損益管理シート作成',level:'中級者',platforms:['ココナラ','ランサーズ']},
+  {n:19,name:'予算実績比較レポート作成',level:'中級者',platforms:['ココナラ']},
+  {n:20,name:'給与計算システム構築（GAS/Excel）',level:'中級者',platforms:['クラウドワークス']},
+  {n:21,name:'飲食店向け原価管理表作成',level:'中級者',platforms:['クラウドワークス']},
+  {n:22,name:'アルバイトシフト管理アプリ作成（簡易HTML/GAS）',level:'中級者',platforms:['ココナラ']},
+  {n:23,name:'業務改善コンサル（飲食・小売向け）',level:'中級者',platforms:[]},
+  {n:24,name:'経理業務フロー設計・自動化提案',level:'中級者',platforms:['ココナラ','ランサーズ']},
+  {n:25,name:'Google口コミ返信自動化（Make/Zapier+AI）',level:'中級者',platforms:['クラウドワークス']},
+  {n:26,name:'EC事業者向け経理代行（Amazon/楽天）',level:'中級者',platforms:['クラウドワークス','Upwork']},
+  {n:27,name:'請求書発行〜支払管理の自動化構築',level:'中級者',platforms:['クラウドワークス']},
+  {n:28,name:'簡易業務システム開発（GAS/HTML）',level:'中級者',platforms:['クラウドワークス']},
+  {n:29,name:'AIプロンプト設計・業務テンプレート販売',level:'中級者',platforms:['ココナラ','Upwork']},
+  {n:30,name:'note/Instagramでの経理系コンテンツ販売',level:'中級者',platforms:['ココナラ']},
+  {n:31,name:'中小企業向け経理体制構築コンサル',level:'高単価',platforms:['ココナラ','ランサーズ']},
+  {n:32,name:'freee×業務自動化の包括コンサル',level:'高単価',platforms:['クラウドワークス']},
+  {n:33,name:'飲食チェーン向け多店舗管理システム構築',level:'高単価',platforms:['クラウドワークス']},
+  {n:34,name:'経理アウトソーシング（内製化支援）コンサル',level:'高単価',platforms:['クラウドワークス']},
+  {n:35,name:'酒蔵・地方企業向け業務改善コンサル',level:'高単価',platforms:[]},
+  {n:36,name:'AI活用業務設計コンサル（ChatGPT/Claude導入支援）',level:'高単価',platforms:['ココナラ']},
+  {n:37,name:'経営者向け月次レポート作成・分析（顧問契約）',level:'高単価',platforms:['ココナラ','ランサーズ']},
+  {n:38,name:'EC分析・改善提案サービス',level:'高単価',platforms:[]},
+  {n:39,name:'給与・労務コンプライアンス監査サービス',level:'高単価',platforms:['クラウドワークス','ランサーズ']},
+  {n:40,name:'雇用契約書一括作成・管理システム構築',level:'高単価',platforms:['クラウドワークス']},
+  {n:41,name:'部門別損益分析ダッシュボード構築（GAS/Looker）',level:'高単価',platforms:['クラウドワークス']},
+  {n:42,name:'AO Assistブランドでのサブスク型経理支援サービス',level:'高単価',platforms:['ココナラ']},
+  {n:43,name:'オンライン講座・教材販売（経理×AI）',level:'高単価',platforms:['ココナラ']},
+  {n:44,name:'海外フリーランス向け経理テンプレート販売（Upwork）',level:'高単価',platforms:['Upwork']},
+  {n:45,name:'多言語対応経理ツール開発・販売',level:'高単価',platforms:['Upwork']},
+  {n:46,name:'経理代行＋freee運用の月額顧問契約（複数社）',level:'高単価',platforms:['ランサーズ']},
+  {n:47,name:'業務改善マニュアル販売（Stores/BASE）',level:'高単価',platforms:['ココナラ']},
+  {n:48,name:'AIエージェント構築代行（中小企業向け）',level:'高単価',platforms:['Upwork']},
+  {n:49,name:'経理×AI活用コンサルの法人研修講師',level:'高単価',platforms:[]},
+  {n:50,name:'AO Assistアプリ群のSaaS化・サブスク展開',level:'高単価',platforms:[]}
+];
+function renderJobList(){
+  const lv = document.getElementById('jobLevelFilter').value;
+  const pf = document.getElementById('jobPlatformFilter').value;
+  const filtered = JOBS_50.filter(j => (!lv || j.level===lv) && (!pf || j.platforms.includes(pf)));
+  document.getElementById('jobList').innerHTML = filtered.map(j=>`
+    <div class="col-md-4 col-sm-6">
+      <div class="job-card">
+        <div class="fw-bold small">No.${j.n} ${escapeHtml(j.name)}</div>
+        <div class="mt-1"><span class="badge ${j.level==='初心者'?'badge-sage':j.level==='中級者'?'badge-warm':'bg-dark'} badge">${j.level}</span>
+        ${j.platforms.map(p=>`<span class="badge bg-light text-dark border">${p}</span>`).join(' ')}</div>
+      </div>
+    </div>`).join('') || '<div class="text-muted small">該当する仕事がありません。</div>';
+}
+document.getElementById('jobLevelFilter').addEventListener('change', renderJobList);
+document.getElementById('jobPlatformFilter').addEventListener('change', renderJobList);
+
+/* ===================== ダッシュボード ===================== */
+let incomeChartInstance = null;
+function renderDashboard(){
+  document.getElementById('dashName').textContent = DATA.profile.name || 'あなた';
+  const totalIncome = DATA.income.reduce((s,i)=> s + (i.type==='expense'? -i.amount : i.amount), 0);
+  const monthIncome = currentMonthIncome();
+  document.getElementById('statTotalIncome').textContent = yen(totalIncome);
+  document.getElementById('statMonthIncome').textContent = yen(monthIncome);
+  document.getElementById('statChallengeDone').textContent = DATA.challenges.filter(c=>c.done).length;
+  document.getElementById('statDiaryCount').textContent = DATA.diary.length;
+
+  // chart: last 6 months
+  const months = [];
+  const now = new Date();
+  for(let i=5;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    months.push(d.toISOString().slice(0,7));
+  }
+  const monthTotals = months.map(ym => DATA.income.filter(i=>i.date.startsWith(ym)).reduce((s,i)=> s + (i.type==='expense'? -i.amount : i.amount), 0));
+  try{
+    if(typeof Chart === 'undefined') throw new Error('Chart.js not loaded');
+    const ctx = document.getElementById('incomeChart');
+    if(incomeChartInstance) incomeChartInstance.destroy();
+    incomeChartInstance = new Chart(ctx, {
+      type:'bar',
+      data:{ labels: months, datasets:[{ label:'月別収益', data: monthTotals, backgroundColor:'#2e6b50' }] },
+      options:{ plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+    });
+  }catch(e){
+    console.warn('グラフの描画に失敗しました:', e);
+  }
+
+  const dashRoadmap = document.getElementById('dashRoadmap');
+  let currentStage = ROADMAP_STAGES[0], reached = false;
+  for(const st of ROADMAP_STAGES){ if(monthIncome>=st.amount){ currentStage = st; } }
+  const next = ROADMAP_STAGES.find(st=>st.amount>monthIncome);
+  dashRoadmap.innerHTML = `
+    <div class="mb-2">今月の収益：<b>${yen(monthIncome)}</b></div>
+    <div class="progress mb-2" style="height:18px;">
+      <div class="progress-bar bg-success" style="width:${next? Math.min(100, monthIncome/next.amount*100):100}%">${next? Math.round(monthIncome/next.amount*100)+'%':'達成'}</div>
+    </div>
+    <div class="small text-muted">${next? '次の目標：'+next.label+'（'+next.desc+'）' : '最終ステージに到達しています！'}</div>`;
+
+  const recent = [...DATA.successes].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3);
+  document.getElementById('dashRecentSuccess').innerHTML = recent.length? recent.map(s=>`
+    <div class="mb-2"><span class="fw-bold">🏆 ${escapeHtml(s.title)}</span> <span class="text-muted small">${s.date}</span></div>`).join('')
+    : '<div class="text-muted small">まだ記録がありません。「成功体験DB」から追加しましょう。</div>';
+}
+
+/* ===================== 設定 ===================== */
+function fillSettings(){
+  document.getElementById('settingName').value = DATA.profile.name||'';
+  document.getElementById('settingSonName').value = DATA.profile.sonName||'';
+  document.getElementById('driveClientId').value = DATA.settings.driveClientId||'';
+}
+document.getElementById('saveProfileBtn').addEventListener('click', ()=>{
+  DATA.profile.name = document.getElementById('settingName').value;
+  DATA.profile.sonName = document.getElementById('settingSonName').value;
+  saveData(); renderDashboard(); toast('プロフィールを保存しました');
+});
+document.getElementById('exportJsonBtn').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(DATA, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ao58-challenge-'+todayStr()+'.json';
+  a.click(); URL.revokeObjectURL(url);
+});
+document.getElementById('importJsonInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const parsed = JSON.parse(reader.result);
+      DATA = Object.assign(defaultData(), parsed);
+      saveData(); renderAll(); toast('データを読み込みました');
+    }catch(err){ toast('読み込みに失敗しました。ファイル形式を確認してください。'); }
+  };
+  reader.readAsText(file);
+});
+
+/* ===================== Google Drive 連携 ===================== */
+let gisTokenClient = null;
+let driveAccessToken = null;
+document.getElementById('saveDriveClientBtn').addEventListener('click', ()=>{
+  DATA.settings.driveClientId = document.getElementById('driveClientId').value.trim();
+  saveData(); toast('クライアントIDを保存しました'); initDriveAuth();
+});
+function initDriveAuth(){
+  if(!DATA.settings.driveClientId || typeof google === 'undefined' || !google.accounts) return;
+  gisTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: DATA.settings.driveClientId,
+    scope: 'https://www.googleapis.com/auth/drive.file',
+    callback: (resp)=>{
+      if(resp.error){ document.getElementById('driveStatus').textContent='認証エラー: '+resp.error; return; }
+      driveAccessToken = resp.access_token;
+      document.getElementById('driveStatus').textContent = '接続済み（このブラウザのセッション内のみ有効）';
+    }
+  });
+}
+function ensureDriveToken(cb){
+  if(!gisTokenClient){ initDriveAuth(); }
+  if(!gisTokenClient){ toast('クライアントIDを設定してください'); return; }
+  if(driveAccessToken){ cb(); return; }
+  gisTokenClient.callback = (resp)=>{
+    if(resp.error){ document.getElementById('driveStatus').textContent='認証エラー: '+resp.error; return; }
+    driveAccessToken = resp.access_token;
+    document.getElementById('driveStatus').textContent = '接続済み（このブラウザのセッション内のみ有効）';
+    cb();
+  };
+  gisTokenClient.requestAccessToken();
+}
+document.getElementById('driveSaveBtn').addEventListener('click', ()=>{
+  ensureDriveToken(async ()=>{
+    try{
+      document.getElementById('driveStatus').textContent='保存中...';
+      const metadata = { name: DRIVE_FILE_NAME, mimeType:'application/json' };
+      const boundary = '-------ao58boundary';
+      const body =
+        `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(metadata)}\r\n`+
+        `--${boundary}\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(DATA)}\r\n`+
+        `--${boundary}--`;
+      const fileId = DATA.settings.driveFileId;
+      const url = fileId
+        ? `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=multipart`
+        : `https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart`;
+      const res = await fetch(url, {
+        method: fileId? 'PATCH':'POST',
+        headers:{ 'Authorization':'Bearer '+driveAccessToken, 'Content-Type':`multipart/related; boundary=${boundary}` },
+        body
+      });
+      const json = await res.json();
+      if(json.id){ DATA.settings.driveFileId = json.id; saveData(); }
+      document.getElementById('driveStatus').textContent = '保存しました（'+new Date().toLocaleString('ja-JP')+'）';
+      toast('Googleドライブに保存しました');
+    }catch(err){ document.getElementById('driveStatus').textContent='保存に失敗しました'; toast('保存に失敗しました'); }
+  });
+});
+document.getElementById('driveLoadBtn').addEventListener('click', ()=>{
+  ensureDriveToken(async ()=>{
+    try{
+      document.getElementById('driveStatus').textContent='読込中...';
+      let fileId = DATA.settings.driveFileId;
+      if(!fileId){
+        const listRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${DRIVE_FILE_NAME}'&spaces=drive&fields=files(id,name)`, {
+          headers:{ 'Authorization':'Bearer '+driveAccessToken }
+        });
+        const listJson = await listRes.json();
+        if(listJson.files && listJson.files.length){ fileId = listJson.files[0].id; }
+      }
+      if(!fileId){ document.getElementById('driveStatus').textContent='ドライブにファイルが見つかりません'; toast('ドライブに保存データが見つかりません'); return; }
+      const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, { headers:{ 'Authorization':'Bearer '+driveAccessToken } });
+      const json = await res.json();
+      DATA = Object.assign(defaultData(), json);
+      DATA.settings.driveFileId = fileId;
+      saveData(); renderAll();
+      document.getElementById('driveStatus').textContent = '読込完了（'+new Date().toLocaleString('ja-JP')+'）';
+      toast('Googleドライブからデータを読み込みました');
+    }catch(err){ document.getElementById('driveStatus').textContent='読込に失敗しました'; toast('読込に失敗しました'); }
+  });
+});
+
+/* ===================== 初期化 ===================== */
+function renderAll(){
+  fillDreamForm();
+  renderIncome();
+  renderChallenges();
+  renderDiary();
+  renderTroubles();
+  renderAiLogs();
+  renderLearning();
+  renderSuccesses();
+  renderMonthlyList();
+  renderRoadmapSection();
+  fillSettings();
+  renderDashboard();
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('incDate').value = todayStr();
+  document.getElementById('diaryDate').value = todayStr();
+  document.getElementById('learnDate').value = todayStr();
+  document.getElementById('successDate').value = todayStr();
+  document.getElementById('monthlyMonth').value = todayStr().slice(0,7);
+  renderAll();
+  setTimeout(initDriveAuth, 800);
+});
+</script>
+</body>
+</html>
