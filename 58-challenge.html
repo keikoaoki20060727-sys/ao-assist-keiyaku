@@ -630,7 +630,11 @@ function organizeTrouble(text){
 }
 document.getElementById('organizeBtn').addEventListener('click', ()=>{
   const text = document.getElementById('troubleInput').value.trim();
-  if(!text){ toast('相談内容を入力してください'); return; }
+  if(!text){
+    toast('相談内容を入力してください');
+    document.getElementById('organizeResultBox').style.display='none';
+    return;
+  }
   const r = organizeTrouble(text);
   document.getElementById('orgProblem').value = r.problem;
   document.getElementById('orgCauses').value = r.causes.map(c=>'・'+c).join('\n');
@@ -975,13 +979,18 @@ function renderDashboard(){
     months.push(d.toISOString().slice(0,7));
   }
   const monthTotals = months.map(ym => DATA.income.filter(i=>i.date.startsWith(ym)).reduce((s,i)=> s + (i.type==='expense'? -i.amount : i.amount), 0));
-  const ctx = document.getElementById('incomeChart');
-  if(incomeChartInstance) incomeChartInstance.destroy();
-  incomeChartInstance = new Chart(ctx, {
-    type:'bar',
-    data:{ labels: months, datasets:[{ label:'月別収益', data: monthTotals, backgroundColor:'#2e6b50' }] },
-    options:{ plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
-  });
+  try{
+    if(typeof Chart === 'undefined') throw new Error('Chart.js not loaded');
+    const ctx = document.getElementById('incomeChart');
+    if(incomeChartInstance) incomeChartInstance.destroy();
+    incomeChartInstance = new Chart(ctx, {
+      type:'bar',
+      data:{ labels: months, datasets:[{ label:'月別収益', data: monthTotals, backgroundColor:'#2e6b50' }] },
+      options:{ plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+    });
+  }catch(e){
+    console.warn('グラフの描画に失敗しました:', e);
+  }
 
   const dashRoadmap = document.getElementById('dashRoadmap');
   let currentStage = ROADMAP_STAGES[0], reached = false;
